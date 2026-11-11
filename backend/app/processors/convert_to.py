@@ -126,24 +126,30 @@ class ConvertToProcessor:
     def images_to_pdf(image_paths: List[Path], output_path: Path, options: Dict[str, Any]) -> Path:
         """
         Converts multiple JPG or PNG images into a unified PDF document.
-        Supports page orientation (portrait/landscape) and margin options.
+        Supports page_size (A4, A3, Letter, Legal), orientation (portrait/landscape) and margin options.
         """
         orientation = options.get("orientation", "portrait")
+        page_size_name = options.get("page_size", "A4").upper()
+        margin = float(options.get("margin", 10))
+
+        PAGE_SIZES = {
+            "A4": (595, 842),
+            "A3": (842, 1191),
+            "LETTER": (612, 792),
+            "LEGAL": (612, 1008),
+        }
+        base_w, base_h = PAGE_SIZES.get(page_size_name, (595, 842))
+
+        if orientation == "landscape":
+            page_width, page_height = max(base_w, base_h), min(base_w, base_h)
+        else:
+            page_width, page_height = min(base_w, base_h), max(base_w, base_h)
+
         doc = fitz.open()
 
         for img_p in image_paths:
-            with Image.open(img_p) as img:
-                w, h = img.size
-
-            if orientation == "landscape" and h > w:
-                page_width, page_height = 842, 595  # A4 Landscape
-            elif orientation == "portrait" and w > h:
-                page_width, page_height = 595, 842  # A4 Portrait
-            else:
-                page_width, page_height = (595, 842) if orientation == "portrait" else (842, 595)
-
             page = doc.new_page(width=page_width, height=page_height)
-            rect = fitz.Rect(20, 20, page_width - 20, page_height - 20)
+            rect = fitz.Rect(margin, margin, page_width - margin, page_height - margin)
             page.insert_image(rect, filename=str(img_p), keep_proportion=True)
 
         doc.save(str(output_path), garbage=4, deflate=True)

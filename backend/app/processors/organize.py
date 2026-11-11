@@ -19,9 +19,12 @@ class OrganizeProcessor:
     def split_pdf(input_path: Path, output_path: Path, options: Dict[str, Any]) -> Path:
         """
         Split PDF by pages, ranges, or every page.
-        If multiple documents are created, packages them into a .zip file.
+        Modes:
+          - 'all':        One PDF per page, zipped together.
+          - 'range':      Extract selected pages (single page range) into one PDF.
+          - 'multi':      Split at comma-separated ranges, each range -> separate PDF, all zipped.
         """
-        mode = options.get("mode", "range")  # 'range', 'all', 'extract'
+        mode = options.get("mode", "range")  # 'range', 'all', 'multi'
         page_range_str = options.get("ranges", "1-end")
 
         with fitz.open(input_path) as doc:
@@ -30,7 +33,7 @@ class OrganizeProcessor:
                 raise ValueError("PDF document has no pages.")
 
             if mode == "all":
-                # Create a zip containing each individual page
+                # One PDF per page, zipped
                 zip_path = output_path.with_suffix(".zip")
                 with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zipf:
                     for i in range(total_pages):
@@ -43,8 +46,50 @@ class OrganizeProcessor:
                         temp_page_file.unlink(missing_ok=True)
                 return zip_path
 
-            elif mode in ("range", "extract"):
-                # Parse page numbers (1-based from user)
+            elif mode == "multi":
+                # Each comma-separated range becomes its own PDF, all packed into a ZIP
+                zip_path = output_path.with_suffix(".zip")
+                range_parts = [r.strip() for r in page_range_str.split(",") if r.strip()]
+                if not range_parts:
+                    range_parts = [f"1-{total_pages}"]
+
+                with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zipf:
+                    for seg_idx, part in enumerate(range_parts, start=1):
+                        indices = []
+                        if "-" in part:
+                            subparts = part.split("-", 1)
+                            start_str = subparts[0].strip()
+                            end_str = subparts[1].strip()
+                            start = int(start_str) if start_str.isdigit() else 1
+                            end = total_pages if end_str.lower() == "end" else (int(end_str) if end_str.isdigit() else total_pages)
+                            start = max(1, min(start, total_pages))
+                            end = max(1, min(end, total_pages))
+                            indices = list(range(start - 1, end))
+                        else:
+                            try:
+                                v = int(part)
+                                if 1 <= v <= total_pages:
+                                    indices = [v - 1]
+                            except ValueError:
+                                pass
+
+                        if not indices:
+                            continue
+
+                        seg_doc = fitz.open()
+                        for p_idx in indices:
+                            seg_doc.insert_pdf(doc, from_page=p_idx, to_page=p_idx)
+                        label = part.replace("-", "_").replace(" ", "")
+                        temp_file = output_path.parent / f"part{seg_idx}_pages_{label}.pdf"
+                        seg_doc.save(str(temp_file), garbage=4, deflate=True)
+                        seg_doc.close()
+                        zipf.write(temp_file, arcname=f"part{seg_idx}_pages_{label}.pdf")
+                        temp_file.unlink(missing_ok=True)
+
+                return zip_path
+
+            else:
+                # mode == 'range' (default): extract selected pages into a single PDF
                 selected_indices = set()
                 parts = page_range_str.split(",")
                 for part in parts:
@@ -52,11 +97,11 @@ class OrganizeProcessor:
                     if not part:
                         continue
                     if "-" in part:
-                        subparts = part.split("-")
+                        subparts = part.split("-", 1)
                         start_str = subparts[0].strip()
                         end_str = subparts[1].strip()
-                        start = int(start_str) if start_str else 1
-                        end = total_pages if end_str.lower() == "end" else int(end_str)
+                        start = int(start_str) if start_str.isdigit() else 1
+                        end = total_pages if end_str.lower() == "end" else (int(end_str) if end_str.isdigit() else total_pages)
                         start = max(1, min(start, total_pages))
                         end = max(1, min(end, total_pages))
                         for p in range(start, end + 1):
@@ -70,13 +115,10 @@ class OrganizeProcessor:
                             pass
 
                 if not selected_indices:
-                    # Default all
-                    selected_indices = list(range(total_pages))
-                else:
-                    selected_indices = sorted(list(selected_indices))
+                    selected_indices = set(range(total_pages))
 
                 split_doc = fitz.open()
-                for p_idx in selected_indices:
+                for p_idx in sorted(selected_indices):
                     split_doc.insert_pdf(doc, from_page=p_idx, to_page=p_idx)
                 split_doc.save(str(output_path), garbage=4, deflate=True)
                 split_doc.close()
