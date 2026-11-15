@@ -1,6 +1,8 @@
 import os
-from typing import List
+import json
+from typing import List, Union
 from pydantic_settings import BaseSettings
+from pydantic import field_validator
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "CrazyPDF"
@@ -12,14 +14,32 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
     
-    # CORS
-    CORS_ORIGINS: List[str] = [
+    # CORS (Accepts comma-separated string, JSON array, or wildcard without JSONDecodeError on Render)
+    CORS_ORIGINS: Union[str, List[str]] = [
         "http://localhost:5173",
         "http://127.0.0.1:5173",
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         "http://localhost:8000",
+        "https://crazypdf-frontend.onrender.com",
     ]
+
+    @field_validator("CORS_ORIGINS", mode="before")
+    @classmethod
+    def assemble_cors_origins(cls, v: Union[str, List[str]]) -> List[str]:
+        if isinstance(v, str):
+            val = v.strip()
+            if not val or val == "*":
+                return ["*"]
+            if val.startswith("[") and val.endswith("]"):
+                try:
+                    return json.loads(val)
+                except Exception:
+                    pass
+            return [x.strip() for x in val.split(",") if x.strip()]
+        elif isinstance(v, list):
+            return v
+        return ["*"]
     
     # Database (Default async SQLite for zero-config run, seamlessly configurable for PostgreSQL)
     DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./crazypdf.db")

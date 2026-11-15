@@ -26,7 +26,7 @@ services:
       - key: DATABASE_URL
         value: "sqlite+aiosqlite:///./crazypdf.db"
       - key: CORS_ORIGINS
-        value: "*"
+        value: "https://crazypdf-frontend.onrender.com,http://localhost:5173"
 
   # ─── React Vite Frontend Static Site ─────────────────────────────────────
   - type: web

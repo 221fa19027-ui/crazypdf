@@ -52,13 +52,9 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 app.add_middleware(SecurityHeadersMiddleware)
 
 # Dynamic CORS Configuration (supports Render deployments and local dev)
-import os
-
-cors_env = os.getenv("CORS_ORIGINS", "")
-if cors_env:
-    allow_origins = [o.strip() for o in cors_env.split(",") if o.strip()]
-else:
-    allow_origins = settings.CORS_ORIGINS
+allow_origins = list(settings.CORS_ORIGINS) if isinstance(settings.CORS_ORIGINS, list) else [str(settings.CORS_ORIGINS)]
+if "https://crazypdf-frontend.onrender.com" not in allow_origins and "*" not in allow_origins:
+    allow_origins.append("https://crazypdf-frontend.onrender.com")
 
 app.add_middleware(
     CORSMiddleware,

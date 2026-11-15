@@ -52,7 +52,7 @@ If you prefer to configure each service manually in the Render dashboard:
    | `FILE_EXPIRATION_MINUTES` | `60` | Auto-shred lifecycle interval |
    | `TEMP_STORAGE_DIR` | `./tmp_storage` | Ephemeral sandbox folder |
    | `DATABASE_URL` | `sqlite+aiosqlite:///./crazypdf.db` | Async SQLite database |
-   | `CORS_ORIGINS` | `*` | Or your frontend render URL |
+   | `CORS_ORIGINS` | `https://crazypdf-frontend.onrender.com,*` | Allows your frontend URL and Render preview domains |
 5. Click **Create Web Service**.
 6. Once deployed, copy your backend URL (e.g., `https://crazypdf-backend.onrender.com`).
 
