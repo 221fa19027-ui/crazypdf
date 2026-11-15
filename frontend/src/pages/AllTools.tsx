@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ALL_TOOLS, TOOL_CATEGORIES, type ToolCategory } from '../types/tools';
 import { ToolCard } from '../components/ToolCard';
-import { Search, Sparkles, Filter, X } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 
 export const AllTools: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -39,28 +39,34 @@ export const AllTools: React.FC = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
       {/* Page Header */}
       <div className="text-center max-w-3xl mx-auto space-y-3">
-        <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-          All CrazyPDF Tools
+        <h1
+          className="text-3xl sm:text-4xl font-semibold text-slate-900 dark:text-white tracking-tight"
+          style={{ textWrap: 'balance' }}
+        >
+          All Thirty-four CrazyPDF Tools
         </h1>
-        <p className="text-sm text-slate-600 dark:text-slate-400">
-          Explore our complete suite of 34 high-speed, privacy-first PDF utilities.
+        <p
+          className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed"
+          style={{ textWrap: 'pretty' }}
+        >
+          Explore our complete suite of high-speed, privacy-first PDF utilities.
         </p>
 
         {/* Search Bar */}
         <div className="pt-4 max-w-xl mx-auto relative">
           <div className="relative flex items-center">
-            <Search className="w-5 h-5 text-slate-400 absolute left-4 pointer-events-none" />
+            <Search className="w-4 h-4 text-slate-400 absolute left-4 pointer-events-none" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search tools (e.g. merge, compress, word, protect, OCR)..."
-              className="w-full pl-12 pr-10 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm shadow-sm focus:ring-2 focus:ring-brand-500 outline-none"
+              className="w-full pl-11 pr-10 py-3 rounded-2xl border border-slate-200 dark:border-[#272727] bg-white dark:bg-[#181818] text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/30 transition-all duration-200"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 p-1 rounded-lg text-slate-400 hover:text-slate-600"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -73,10 +79,10 @@ export const AllTools: React.FC = () => {
       <div className="flex flex-wrap items-center justify-center gap-2">
         <button
           onClick={() => handleCategoryChange('all')}
-          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 ${
             selectedCategory === 'all'
-              ? 'bg-brand-600 text-white shadow-md shadow-brand-500/20'
-              : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300'
+              ? 'bg-brand-600 text-white shadow-sm'
+              : 'bg-white dark:bg-[#181818] border border-slate-200 dark:border-[#272727] text-slate-600 dark:text-slate-400 hover:border-slate-300'
           }`}
         >
           All Tools ({ALL_TOOLS.length})
@@ -87,10 +93,10 @@ export const AllTools: React.FC = () => {
             <button
               key={cat.id}
               onClick={() => handleCategoryChange(cat.id)}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 ${
                 selectedCategory === cat.id
-                  ? 'bg-brand-600 text-white shadow-md shadow-brand-500/20'
-                  : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300'
+                  ? 'bg-brand-600 text-white shadow-sm'
+                  : 'bg-white dark:bg-[#181818] border border-slate-200 dark:border-[#272727] text-slate-600 dark:text-slate-400 hover:border-slate-300'
               }`}
             >
               {cat.title} ({count})
@@ -99,24 +105,22 @@ export const AllTools: React.FC = () => {
         })}
       </div>
 
-      {/* Results grid */}
+      {/* Tools Grid */}
       {filteredTools.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {filteredTools.map((tool) => (
             <ToolCard key={tool.id} tool={tool} />
           ))}
         </div>
       ) : (
-        <div className="text-center py-16 space-y-3">
-          <p className="text-base font-bold text-slate-700 dark:text-slate-300">No tools matched "{searchQuery}"</p>
+        <div className="text-center py-20 bg-white dark:bg-[#181818] rounded-2xl border border-slate-200 dark:border-[#272727] max-w-md mx-auto space-y-3">
+          <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">No tools found</p>
+          <p className="text-xs text-slate-500">No tools matched your search query "{searchQuery}".</p>
           <button
-            onClick={() => {
-              setSearchQuery('');
-              setSelectedCategory('all');
-            }}
-            className="text-xs font-semibold text-brand-600 dark:text-electric-400 hover:underline"
+            onClick={() => { setSearchQuery(''); setSelectedCategory('all'); }}
+            className="px-4 py-1.5 rounded-xl bg-brand-50 text-brand-600 dark:bg-brand-950/60 dark:text-brand-400 text-xs font-semibold"
           >
-            Clear filters and view all tools
+            Clear filters
           </button>
         </div>
       )}

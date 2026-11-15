@@ -45,6 +45,26 @@ export const ToolDetailPage: React.FC = () => {
       return;
     }
 
+    if ((tool.slug === 'merge-pdf' || tool.slug === 'compare-pdf' || tool.requiresSecondFile) && files.length < 2) {
+      setErrorMessage(`Please select at least 2 PDF files to ${tool.slug === 'compare-pdf' ? 'compare' : 'merge'}.`);
+      return;
+    }
+
+    if (tool.slug === 'protect-pdf' && !options.password?.trim()) {
+      setErrorMessage('Please enter a password to encrypt and protect your PDF.');
+      return;
+    }
+
+    if (tool.slug === 'unlock-pdf' && !options.password?.trim()) {
+      setErrorMessage('Please enter your authorized password to decrypt the PDF.');
+      return;
+    }
+
+    if (tool.slug === 'redact-pdf' && !options.terms?.trim()) {
+      setErrorMessage('Please enter words, names, or terms to redact permanently.');
+      return;
+    }
+
     setErrorMessage(null);
     setIsProcessing(true);
     setJobState('uploading');
