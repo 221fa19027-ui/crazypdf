@@ -30,7 +30,7 @@ export const Privacy: React.FC = () => {
             <span>2. Account Information</span>
           </h2>
           <p>
-            When you sign in using Google OAuth, we receive your Google Subject Identifier (`sub`), verified name, email address, and profile picture avatar. We do not receive, store, or process any password credentials.
+            CrazyPDF operates under an anonymous, zero-account architecture. You are not required to create an account, register an email, or provide any password credentials to use our suite of document utilities.
           </p>
         </section>
 

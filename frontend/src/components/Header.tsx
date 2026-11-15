@@ -1,27 +1,16 @@
 import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import { 
-  Sun, Moon, ChevronDown, Sparkles, Shield, User, 
-  LogOut, LayoutDashboard, Menu, X, Zap, ArrowRight 
+  Sun, Moon, ChevronDown, Sparkles, Menu, X, Zap, ArrowRight 
 } from 'lucide-react';
 import { TOOL_CATEGORIES } from '../types/tools';
 
 export const Header: React.FC = () => {
-  const { user, isAuthenticated, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [toolsDropdownOpen, setToolsDropdownOpen] = useState(false);
-  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
-  const navigate = useNavigate();
   const location = useLocation();
-
-  const handleLogout = () => {
-    logout();
-    setUserDropdownOpen(false);
-    navigate('/');
-  };
 
   return (
     <header className="sticky top-3 z-50 w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -127,7 +116,7 @@ export const Header: React.FC = () => {
           </Link>
         </nav>
 
-        {/* Right side controls: Theme toggle & Auth */}
+        {/* Right side controls: Theme toggle & Direct Action Button */}
         <div className="flex items-center gap-2.5">
           {/* Theme Toggle Button */}
           <button
@@ -142,88 +131,14 @@ export const Header: React.FC = () => {
             )}
           </button>
 
-          {/* Authentication State */}
-          {isAuthenticated && user ? (
-            <div className="relative">
-              <button
-                onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                className="flex items-center gap-2 p-1 rounded-full hover:ring-2 hover:ring-brand-500/30 transition-all duration-200"
-              >
-                {user.profile_picture ? (
-                  <img
-                    src={user.profile_picture}
-                    alt={user.name}
-                    className="w-7 h-7 rounded-full border border-brand-500"
-                  />
-                ) : (
-                  <div className="w-7 h-7 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold text-xs">
-                    {user.name.charAt(0)}
-                  </div>
-                )}
-                <span className="hidden sm:inline text-xs font-semibold text-slate-800 dark:text-slate-200">
-                  {user.name.split(' ')[0]}
-                </span>
-                <ChevronDown className="w-3 h-3 text-slate-500 dark:text-slate-400" />
-              </button>
-
-              {userDropdownOpen && (
-                <div className="absolute right-0 top-full mt-2 w-56 rounded-2xl bg-white dark:bg-[#181818] shadow-xl border border-slate-200 dark:border-[#272727] p-2 z-50 animate-in fade-in duration-150">
-                  <div className="px-3 py-2 border-b border-slate-100 dark:border-[#272727]">
-                    <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Signed in as</p>
-                    <p className="text-xs font-semibold text-slate-900 dark:text-white truncate">{user.email}</p>
-                  </div>
-                  <Link
-                    to="/dashboard"
-                    onClick={() => setUserDropdownOpen(false)}
-                    className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#272727]"
-                  >
-                    <LayoutDashboard className="w-3.5 h-3.5 text-brand-600" />
-                    Dashboard
-                  </Link>
-                  <Link
-                    to="/security"
-                    onClick={() => setUserDropdownOpen(false)}
-                    className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#272727]"
-                  >
-                    <Shield className="w-3.5 h-3.5 text-electric-500" />
-                    Privacy & Storage
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30"
-                  >
-                    <LogOut className="w-3.5 h-3.5" />
-                    Sign out
-                  </button>
-                </div>
-              )}
-            </div>
-          ) : (
-            <Link
-              to="/login"
-              className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900 dark:bg-brand-600 text-white font-semibold text-xs shadow-sm hover:bg-slate-800 dark:hover:bg-brand-500 transition-all duration-200"
-            >
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24">
-                <path
-                  fill="#EA4335"
-                  d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"
-                />
-                <path
-                  fill="#4285F4"
-                  d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5.1 3.7-8.8z"
-                />
-                <path
-                  fill="#FBBC05"
-                  d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.3 0 15.2c0 2.9.7 5.5 1.9 7.9l3.7-2.9z"
-                />
-                <path
-                  fill="#34A853"
-                  d="M12 23.5c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.4-6.4-5.2L1.9 16.5C3.7 20.2 7.5 23.5 12 23.5z"
-                />
-              </svg>
-              <span>Continue with Google</span>
-            </Link>
-          )}
+          {/* Direct CTA button (No login required) */}
+          <Link
+            to="/tools"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900 dark:bg-brand-600 text-white font-semibold text-xs shadow-sm hover:bg-slate-800 dark:hover:bg-brand-500 transition-all duration-200 hover:-translate-y-px"
+          >
+            <Zap className="w-3.5 h-3.5 text-brand-400 dark:text-white" />
+            <span>Start Free</span>
+          </Link>
 
           {/* Mobile menu toggle */}
           <button
@@ -281,23 +196,13 @@ export const Header: React.FC = () => {
           >
             Pricing
           </Link>
-          {isAuthenticated ? (
-            <Link
-              to="/dashboard"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 rounded-xl font-medium text-xs text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/40"
-            >
-              My Dashboard
-            </Link>
-          ) : (
-            <Link
-              to="/login"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 rounded-xl font-semibold text-xs text-center bg-brand-600 text-white"
-            >
-              Sign In with Google
-            </Link>
-          )}
+          <Link
+            to="/tools"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block px-3 py-2 rounded-xl font-semibold text-xs text-center bg-brand-600 text-white"
+          >
+            Start Processing Free
+          </Link>
         </div>
       )}
     </header>

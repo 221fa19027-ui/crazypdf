@@ -88,16 +88,11 @@ export const Home: React.FC = () => {
             </a>
 
             <Link
-              to="/login"
+              to="/tools"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 dark:border-[#272727] bg-white dark:bg-[#181818] text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-[#1f1f1f] font-semibold text-sm transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
             >
-              <svg className="w-4 h-4" viewBox="0 0 24 24">
-                <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z" />
-                <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5.1 3.7-8.8z" />
-                <path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.3 0 15.2c0 2.9.7 5.5 1.9 7.9l3.7-2.9z" />
-                <path fill="#34A853" d="M12 23.5c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.4-6.4-5.2L1.9 16.5C3.7 20.2 7.5 23.5 12 23.5z" />
-              </svg>
-              <span>Continue with Google</span>
+              <Zap className="w-4 h-4 text-brand-600 dark:text-electric-400" />
+              <span>Start Converting Free</span>
             </Link>
           </div>
 
@@ -167,7 +162,7 @@ export const Home: React.FC = () => {
             </div>
             <div className="flex items-center gap-1.5">
               <Lock className="w-4 h-4 text-brand-500" />
-              <span>Google OAuth Single Sign On</span>
+              <span>256-Bit Military Encryption</span>
             </div>
             <div className="flex items-center gap-1.5">
               <Clock className="w-4 h-4 text-slate-500" />
@@ -175,7 +170,7 @@ export const Home: React.FC = () => {
             </div>
             <div className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-electric-500" />
-              <span>No Credit Card Required</span>
+              <span>No Account or Sign-Up Needed</span>
             </div>
           </div>
         </div>
@@ -339,7 +334,7 @@ export const Home: React.FC = () => {
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-emerald-500 font-bold">✓</span>
-                  <span>Official Google OAuth with OpenID Connect: zero stored passwords</span>
+                  <span>Zero registration required: no personal emails, passwords or profiles collected</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-emerald-500 font-bold">✓</span>
@@ -510,10 +505,10 @@ export const Home: React.FC = () => {
               Explore All 34 Tools
             </a>
             <Link
-              to="/login"
+              to="/tools"
               className="px-5 py-2.5 rounded-xl border border-slate-200 dark:border-[#272727] bg-slate-50 dark:bg-[#1f1f1f] text-slate-800 dark:text-slate-200 font-semibold text-xs hover:bg-slate-100 dark:hover:bg-[#272727] transition-all duration-300"
             >
-              Sign In with Google
+              Start Converting Now
             </Link>
           </div>
         </div>

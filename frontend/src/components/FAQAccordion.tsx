@@ -12,8 +12,8 @@ const FAQS: FAQItem[] = [
     answer: 'No. CrazyPDF operates under a strict zero permanent storage policy. Uploaded files and generated results are saved only in an isolated temporary job directory, and are permanently wiped by an automated server cleanup task within sixty minutes.',
   },
   {
-    question: 'How does authentication work without passwords?',
-    answer: 'CrazyPDF uses official Google OAuth 2.0 with OpenID Connect as its sole authentication system. We never request or store your password, eliminating database credential leaks and password reset vulnerabilities.',
+    question: 'Do I need to sign up or create an account to use the tools?',
+    answer: 'No. CrazyPDF requires zero registration or sign-in. You can use all thirty-four PDF tools immediately with zero personal information, emails, or passwords collected.',
   },
   {
     question: 'Can I use CrazyPDF tools without creating an account?',

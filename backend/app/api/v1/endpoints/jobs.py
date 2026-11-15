@@ -61,11 +61,21 @@ async def download_processed_file(token: str, db: AsyncSession = Depends(get_db)
         raise HTTPException(status_code=404, detail="File has expired and was automatically cleaned up.")
 
     file_to_send = out_files[0]
-    filename = job.output_filename or file_to_send.name
+
+    # Verify containment within temp storage directory to prevent any path traversal
+    try:
+        file_to_send.resolve().relative_to(storage_service.base_dir.resolve())
+    except ValueError:
+        raise HTTPException(status_code=403, detail="Access denied: file location is outside permitted storage.")
+
+    import re
+    raw_filename = job.output_filename or file_to_send.name
+    # Strip carriage returns, line feeds, double quotes and path separators to prevent header injection
+    safe_filename = re.sub(r'[\r\n"\\/]', '_', raw_filename).strip() or "document.pdf"
     media_type = job.output_mime or "application/octet-stream"
 
     return FileResponse(
         path=str(file_to_send),
-        filename=filename,
+        filename=safe_filename,
         media_type=media_type
     )

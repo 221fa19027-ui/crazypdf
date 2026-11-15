@@ -25,9 +25,21 @@ class SlidingWindowRateLimiter:
 limiter = SlidingWindowRateLimiter()
 
 def get_client_ip(request: Request) -> str:
+    # 1. Cloudflare connecting IP (unspoofable when proxied by Cloudflare)
+    cf_ip = request.headers.get("CF-Connecting-IP")
+    if cf_ip:
+        return cf_ip.strip()
+
+    # 2. Render proxy client IP
+    render_ip = request.headers.get("Render-Proxy-Client-IP")
+    if render_ip:
+        return render_ip.strip()
+
+    # 3. Standard X-Forwarded-For header
     forwarded = request.headers.get("X-Forwarded-For")
     if forwarded:
         return forwarded.split(",")[0].strip()
+
     return request.client.host if request.client else "127.0.0.1"
 
 async def rate_limit_upload(request: Request):

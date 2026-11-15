@@ -46,7 +46,7 @@ export const Pricing: React.FC = () => {
               </li>
               <li className="flex items-center gap-2">
                 <Check className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                <span>Google OAuth fast single sign-on</span>
+                <span>Zero registration or accounts needed</span>
               </li>
               <li className="flex items-center gap-2">
                 <Check className="w-4 h-4 text-emerald-500 flex-shrink-0" />

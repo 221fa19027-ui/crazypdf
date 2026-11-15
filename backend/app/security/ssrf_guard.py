@@ -47,6 +47,13 @@ def validate_safe_url(url: str) -> str:
     if not hostname:
         raise HTTPException(status_code=400, detail="Invalid host in URL.")
 
+    # Restrict to standard web ports to prevent internal port scanning
+    if parsed.port and parsed.port not in (80, 443, 8080, 8443):
+        raise HTTPException(
+            status_code=400,
+            detail=f"Access to port {parsed.port} is blocked. Only standard web ports (80, 443) are allowed."
+        )
+
     # Block common local hostnames
     if hostname.lower() in ("localhost", "127.0.0.1", "0.0.0.0", "internal", "local", "metadata.google.internal"):
         raise HTTPException(status_code=403, detail="Access to local or internal hosts is strictly forbidden.")

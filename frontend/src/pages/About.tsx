@@ -24,7 +24,7 @@ export const About: React.FC = () => {
             Yet traditional desktop tools are notoriously expensive or bloated, while existing free web tools often monetize by silently keeping user files or injecting spammy advertisements.
           </p>
           <p>
-            CrazyPDF was created to provide a refreshingly modern alternative. We combine the speed and simplicity of modern web engineering with an uncompromising commitment to privacy: <strong>Zero permanent document retention</strong>, seamless Google OAuth login, and high-precision tools.
+            CrazyPDF was created to provide a refreshingly modern alternative. We combine the speed and simplicity of modern web engineering with an uncompromising commitment to privacy: <strong>Zero permanent document retention</strong>, zero account requirements, and high-precision tools.
           </p>
         </div>
 

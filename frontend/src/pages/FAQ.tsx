@@ -8,8 +8,8 @@ export const FAQ: React.FC = () => {
       a: 'We implement zero permanent storage. Files are assigned randomized UUID directories on isolated ephemeral disk space and are automatically purged after 60 minutes or immediately upon download. We never inspect, index, or store document text.',
     },
     {
-      q: 'Why does CrazyPDF only use Google OAuth?',
-      a: 'Traditional username/password authentication is prone to credential stuffing, weak passwords, and phishing. By delegating authentication exclusively to Google OAuth 2.0 with OpenID Connect, we guarantee enterprise-grade session security without storing user passwords.',
+      q: 'Do I need to sign up or create an account to use CrazyPDF?',
+      a: 'No. CrazyPDF requires zero registration or sign-in. You can use all thirty-four PDF tools immediately with zero personal information, emails, or passwords collected.',
     },
     {
       q: 'Can I compress my PDF without losing text sharpness?',

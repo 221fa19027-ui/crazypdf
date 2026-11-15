@@ -39,9 +39,9 @@ export const Security: React.FC = () => {
           <div className="w-12 h-12 rounded-2xl bg-brand-50 dark:bg-brand-950/50 text-brand-600 dark:text-brand-400 flex items-center justify-center">
             <Lock className="w-6 h-6" />
           </div>
-          <h3 className="font-bold text-lg text-slate-900 dark:text-white">Google OAuth Authentication Only</h3>
+          <h3 className="font-bold text-lg text-slate-900 dark:text-white">Zero Credential Collection</h3>
           <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-            We eliminated traditional passwords completely. Users sign in exclusively using Google OpenID Connect with cryptographic token verification on the backend. This prevents password stuffing, rainbow tables, and credential stuffing vulnerabilities.
+            We eliminated traditional account creation and passwords completely. Users can process documents freely with zero credentials stored or requested. This guarantees no credential stuffing, data leaks, or tracking vulnerabilities.
           </p>
         </div>
 

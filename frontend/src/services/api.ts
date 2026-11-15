@@ -146,6 +146,14 @@ class ApiService {
 
   getDownloadUrl(urlPath: string): string {
     if (urlPath.startsWith('http')) return urlPath;
+    if (API_BASE_URL.startsWith('http')) {
+      try {
+        const url = new URL(API_BASE_URL);
+        return `${url.origin}${urlPath.startsWith('/') ? '' : '/'}${urlPath}`;
+      } catch {
+        return urlPath;
+      }
+    }
     return urlPath;
   }
 }
